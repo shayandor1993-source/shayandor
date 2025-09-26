@@ -1,0 +1,56 @@
+# =========================
+# .NET / Visual Studio
+# =========================
+
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.dbmdl
+*.bak
+*.log
+*.ldf
+*.ndf
+
+# NuGet
+*.nupkg
+packages/
+*.snupkg
+project.lock.json
+
+# =========================
+# Node.js / React Native
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+expo-debug.log
+.expo/
+.expo-shared/
+
+# Metro bundler cache
+.expo/cache
+.expo/web-build
+.expo/ios
+.expo/android
+
+# React Native build
+android/app/build/
+ios/Pods/
+ios/build/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+
+# Watchman
+.watchmanconfig
+
+# Misc
+.env
+.idea/
+.DS_Store
