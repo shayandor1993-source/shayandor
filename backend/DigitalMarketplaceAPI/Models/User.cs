@@ -34,3 +34,4 @@ namespace DigitalMarketplaceAPI.Models
         public string Role { get; set; } = "User"; // User, Admin, etc.
     }
 }
+
