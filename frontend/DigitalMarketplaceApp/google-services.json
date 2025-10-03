@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "569331507545",
+    "project_id": "digital-marketplace-app",
+    "storage_bucket": "digital-marketplace-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569331507545:android:u8n6ahq4vqtuvvooqr789kuoqlkl26an",
+        "android_client_info": {
+          "package_name": "com.digitalmarketplaceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569331507545-u8n6ahq4vqtuvvooqr789kuoqlkl26an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalmarketplaceapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "569331507545-79htok2jftmot86af9nq36vu53ne8a3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5_Ycwamq07K1q99piJ2m02JbrF6f3kDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569331507545-79htok2jftmot86af9nq36vu53ne8a3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

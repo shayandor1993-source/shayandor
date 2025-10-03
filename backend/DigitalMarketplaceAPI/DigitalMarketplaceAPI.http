@@ -1,0 +1,6 @@
+@DigitalMarketplaceAPI_HostAddress = http://localhost:5201
+
+GET {{DigitalMarketplaceAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
