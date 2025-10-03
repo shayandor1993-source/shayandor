@@ -112,11 +112,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) => {
   };
 
   const menuItems = [
-    { title: 'הפריטים שלי', icon: '📦', onPress: () => Alert.alert('הפריטים שלי', 'כאן יוצגו הפריטים שפרסמתם') },
-    { title: 'ההזמנות שלי', icon: '🛒', onPress: () => Alert.alert('ההזמנות שלי', 'כאן יוצגו ההזמנות שקיבלתם') },
-    { title: 'ההודעות', icon: '💬', onPress: () => Alert.alert('הודעות', 'כאן יוצגו ההודעות שלכם') },
-    { title: 'הגדרות', icon: '⚙️', onPress: () => Alert.alert('הגדרות', 'כאן תוכלו לשנות הגדרות') },
-    { title: 'עזרה ותמיכה', icon: '❓', onPress: () => Alert.alert('עזרה', 'כאן תוכלו לקבל עזרה') },
+    { title: 'הפרסומים שלי', icon: '📦', onPress: () => Alert.alert('הפרסומים שלי', 'כאן יוצגו הפרסומים שפרסמתם') },
+    { title: 'הצעות שהגשתי', icon: '🛒', onPress: () => Alert.alert('הצעות שהגשתי', 'כאן יוצגו ההצעות שהגשתם') },
   ];
 
   return (
@@ -147,7 +144,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) => {
             <View style={styles.statsContainer}>
               <View style={styles.statItem}>
                 <Text style={styles.statNumber}>0</Text>
-                <Text style={styles.statLabel}>פריטים</Text>
+                <Text style={styles.statLabel}>פרסומים פעילים</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
