@@ -11,7 +11,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
 
 interface AddItemScreenProps {
   user: {
@@ -27,7 +26,6 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
-  const [images, setImages] = useState<string[]>([]);
   const [isPublishing, setIsPublishing] = useState(false);
   const [touchedFields, setTouchedFields] = useState({
     title: false,
@@ -36,79 +34,6 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
     category: false,
   });
 
-  const addImage = async () => {
-    if (images.length >= 3) {
-      Alert.alert('הגבלה', 'ניתן להעלות עד 3 תמונות בלבד');
-      return;
-    }
-
-    Alert.alert(
-      'הוסף תמונה',
-      'איך תרצה להוסיף תמונה?',
-      [
-        { text: 'צלם תמונה', onPress: openCamera },
-        { text: 'בחר מהספרייה', onPress: openGallery },
-        { text: 'ביטול', style: 'cancel' },
-      ],
-      { cancelable: true }
-    );
-  };
-
-  const openCamera = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-    
-    if (permissionResult.granted === false) {
-      Alert.alert('שגיאה', 'נדרשת הרשאה לגישה למצלמה');
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.8,
-    });
-
-    if (!result.canceled && result.assets[0]) {
-      setImages(prev => [...prev, result.assets[0].uri]);
-    }
-  };
-
-  const openGallery = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
-    if (permissionResult.granted === false) {
-      Alert.alert('שגיאה', 'נדרשת הרשאה לגישה לאלבום');
-      return;
-    }
-
-    const remainingSlots = 3 - images.length;
-    
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      selectionLimit: remainingSlots,
-      aspect: [16, 9],
-      quality: 0.8,
-    });
-
-    if (!result.canceled && result.assets) {
-      const newImages = result.assets.map(asset => asset.uri);
-      const totalImages = images.length + newImages.length;
-      
-      if (totalImages > 3) {
-        Alert.alert('הגבלה', `ניתן להעלות עד 3 תמונות בלבד. נבחרו ${newImages.length} תמונות אבל ניתן להוסיף רק ${remainingSlots}.`);
-        const allowedImages = newImages.slice(0, remainingSlots);
-        setImages(prev => [...prev, ...allowedImages]);
-      } else {
-        setImages(prev => [...prev, ...newImages]);
-      }
-    }
-  };
-
-  const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-  };
 
   const handlePublish = async () => {
     if (!title || !description || !price || !category) {
@@ -129,7 +54,6 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
           setDescription('');
           setPrice('');
           setCategory('');
-          setImages([]);
         }}]
       );
     }, 2000);
@@ -141,7 +65,6 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
         {/* Professional Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>פרסם מודעה חדשה</Text>
-          <Text style={styles.headerSubtitle}>מכר כרטיסים ושוברים בבטחה</Text>
         </View>
 
         {/* User Info Card */}
@@ -201,20 +124,14 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
               <Text style={styles.required}>* </Text>
               <Text style={styles.label}>סוג הפריט</Text>
             </View>
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false} 
-              style={[styles.categoryScroll, { transform: [{ scaleX: -1 }] }]}
-              contentContainerStyle={styles.categoryScrollContent}
-              directionalLockEnabled={true}
-            >
-              <View style={styles.categoryButtons}>
+            <View style={styles.categoryButtons}>
                 {[
                   { name: 'אחר', icon: '🎫' },
                   { name: 'שוברים', icon: '🎁' },
                   { name: 'כרטיסי סטנדאפ', icon: '🎤' },
                   { name: 'כרטיסי הופעות', icon: '🎵' },
-                  { name: 'כרטיסי ספורט', icon: '⚽' }
+                  { name: 'כרטיסי ספורט', icon: '⚽' },
+                  { name: 'חופשות', icon: '🏖️' }
                 ].map((cat, index) => (
                   <TouchableOpacity
                     key={cat.name}
@@ -237,8 +154,7 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
                     </Text>
                   </TouchableOpacity>
                 ))}
-              </View>
-            </ScrollView>
+            </View>
             {touchedFields.category && !category && (
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>נדרש לבחור סוג פריט</Text>
@@ -246,32 +162,6 @@ const AddItemScreen: React.FC<AddItemScreenProps> = ({ user }) => {
             )}
           </View>
 
-          {/* Images Section */}
-          <View style={styles.inputSection}>
-            <View style={styles.labelContainer}>
-              <Text style={styles.label}>תמונות </Text>
-              <Text style={styles.labelSubtext}>(עד 3 תמונות)</Text>
-            </View>
-            <View style={styles.imagesGrid}>
-              {images.length < 3 && (
-                <TouchableOpacity style={styles.addImageButton} onPress={addImage}>
-                  <Text style={styles.addImageText}>+ הוסף תמונות</Text>
-                  <Text style={styles.addImageSubtext}>עד {3 - images.length} תמונות</Text>
-                </TouchableOpacity>
-              )}
-              {images.map((image, index) => (
-                <View key={index} style={styles.imageContainer}>
-                  <Image source={{ uri: image }} style={styles.previewImage} />
-                  <TouchableOpacity 
-                    style={styles.removeImageButton} 
-                    onPress={() => removeImage(index)}
-                  >
-                    <Text style={styles.removeImageText}>✕</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          </View>
 
           {/* Description Section */}
           <View style={styles.inputSection}>
@@ -376,13 +266,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#1F2937',
-    textAlign: 'right',
+    textAlign: 'center',
     marginBottom: 4,
     writingDirection: 'rtl',
   },
@@ -562,20 +452,12 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop: 8,
   },
-  categoryScroll: {
-    marginTop: 8,
-  },
-  categoryScrollContent: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-  },
   categoryButtons: {
     flexDirection: 'row',
-    paddingRight: 20,
-    paddingLeft: 25,
-    transform: [{ scaleX: -1 }],
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
     alignItems: 'flex-start',
+    gap: 12,
   },
   categoryButton: {
     flexDirection: 'row',
@@ -587,15 +469,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#D1D5DB',
     backgroundColor: '#ffffff',
-    marginLeft: 12,
     minHeight: 56,
   },
   categoryButtonActive: {
     backgroundColor: '#4A90E2',
     borderColor: '#4A90E2',
-  },
-  firstCategoryButton: {
-    marginLeft: 0,
   },
   categoryIcon: {
     fontSize: 16,
@@ -608,70 +486,6 @@ const styles = StyleSheet.create({
   },
   categoryButtonTextActive: {
     color: '#ffffff',
-  },
-  imagesGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
-    marginTop: 8,
-    gap: 12,
-  },
-  addImageButton: {
-    width: 120,
-    height: 80,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderStyle: 'dashed',
-    backgroundColor: '#F9FAFB',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addImageText: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  addImageSubtext: {
-    fontSize: 10,
-    color: '#9CA3AF',
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  imageContainer: {
-    position: 'relative',
-  },
-  previewImage: {
-    width: 120,
-    height: 80,
-    borderRadius: 16,
-    backgroundColor: '#F3F4F6',
-  },
-  removeImageButton: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#EF4444',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  removeImageText: {
-    color: '#ffffff',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   priceInputWrapper: {
     flexDirection: 'row-reverse',
