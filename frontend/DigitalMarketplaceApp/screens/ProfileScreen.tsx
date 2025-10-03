@@ -143,12 +143,16 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout }) => {
             {/* Stats */}
             <View style={styles.statsContainer}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>0</Text>
+                <View style={styles.statNumberContainer}>
+                  <Text style={styles.statNumber}>0</Text>
+                </View>
                 <Text style={styles.statLabel}>פרסומים פעילים</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>0</Text>
+                <View style={styles.statNumberContainer}>
+                  <Text style={styles.statNumber}>0</Text>
+                </View>
                 <Text style={styles.statLabel}>מכירות</Text>
               </View>
               <View style={styles.statDivider} />
@@ -318,6 +322,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignSelf: 'center',
   },
+  statNumberContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 40,
+  },
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -327,9 +336,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 4,
+    textAlign: 'center',
   },
   ratingContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 40,
   },
   ratingStars: {
     fontSize: 16,
